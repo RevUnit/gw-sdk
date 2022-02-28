@@ -520,11 +520,13 @@ function hmrAcceptRun(bundle, id) {
 
 },{}],"8lqZg":[function(require,module,exports) {
 // Import ThoughtSpot SDK
+// -- This is an outdated version of the SDK do to the older version of ThoughSpot that Hyatt is using
 var _visualEmbedSdk = require("@thoughtspot/visual-embed-sdk");
 console.log("JS Loaded");
+// Initialize the ThoughSpot Library
 _visualEmbedSdk.init({
     thoughtSpotHost: "https://selfserviceanalytics.dev.private.hyatt.com",
-    authType: _visualEmbedSdk.AuthType.None
+    authType: _visualEmbedSdk.AuthType.SSO
 });
 // Instantiate class for embedding the full application
 const myEmbed = new _visualEmbedSdk.PinboardEmbed(document.getElementById("embed"), {
@@ -577,7 +579,7 @@ var _pinboard = require("./embed/pinboard");
 var _search = require("./embed/search");
 var _types = require("./types");
 
-},{"./embed/app":"foGCe","./embed/base":"96H72","./embed/search":"cbe7G","./types":"lHa6F","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./embed/pinboard":"3mH4A"}],"foGCe":[function(require,module,exports) {
+},{"./embed/app":"foGCe","./embed/base":"96H72","./embed/pinboard":"3mH4A","./embed/search":"cbe7G","./types":"lHa6F","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"foGCe":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Page", ()=>Page
@@ -692,7 +694,7 @@ class AppEmbed extends _base.V1Embed {
     }
 }
 
-},{"../utils":"hpbba","../types":"lHa6F","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./base":"96H72"}],"hpbba":[function(require,module,exports) {
+},{"../utils":"hpbba","../types":"lHa6F","./base":"96H72","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"hpbba":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "getFilterQuery", ()=>getFilterQuery
@@ -1323,7 +1325,7 @@ class V1Embed extends TsEmbed {
     }
 }
 
-},{"../config":"78ozH","../auth":"cr4Z4","../mixpanel-service":"7y0fn","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../utils":"hpbba","../types":"lHa6F"}],"78ozH":[function(require,module,exports) {
+},{"../utils":"hpbba","../config":"78ozH","../types":"lHa6F","../auth":"cr4Z4","../mixpanel-service":"7y0fn","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"78ozH":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "getThoughtSpotHost", ()=>getThoughtSpotHost
@@ -6363,80 +6365,7 @@ function init_as_module() {
 var mixpanel = init_as_module();
 module.exports = mixpanel;
 
-},{}],"cbe7G":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-/**
- * Embed ThoughtSpot search
- *
- * @Category Search Embed
- */ parcelHelpers.export(exports, "SearchEmbed", ()=>SearchEmbed
-);
-/**
- * Copyright (c) 2021
- *
- * Embed ThoughtSpot search or a saved answer
- *
- * @summary Search embed
- * @author Ayon Ghosh <ayon.ghosh@thoughtspot.com>
- */ var _types = require("../types");
-var _utils = require("../utils");
-var _base = require("./base");
-class SearchEmbed extends _base.TsEmbed {
-    constructor(domSelector, viewConfig){
-        super(domSelector);
-        this.viewConfig = viewConfig;
-    }
-    /**
-     * Get the state of the data sources panel that the embedded
-     * ThoughtSpot search will be initialized with.
-     */ getDataSourceMode() {
-        let dataSourceMode = _types.DataSourceVisualMode.Expanded;
-        if (this.viewConfig.collapseDataSources === true) dataSourceMode = _types.DataSourceVisualMode.Collapsed;
-        if (this.viewConfig.hideDataSources === true) dataSourceMode = _types.DataSourceVisualMode.Hidden;
-        return dataSourceMode;
-    }
-    /**
-     * Construct the URL of the embedded ThoughtSpot search to be
-     * loaded in the iframe
-     * @param answerId The GUID of a saved answer
-     * @param dataSources A list of data source GUIDs
-     * @param searchQuery A search query to be generated on load
-     */ getIFrameSrc(answerId, dataSources, searchQuery) {
-        const { disabledActions , disabledActionReason , hiddenActions , hideResults , enableSearchAssist , searchOptions ,  } = this.viewConfig;
-        const answerPath = answerId ? `saved-answer/${answerId}` : 'answer';
-        const queryParams = {
-        };
-        if (dataSources && dataSources.length) queryParams[_types.Param.DataSources] = JSON.stringify(dataSources);
-        if (searchOptions === null || searchOptions === void 0 ? void 0 : searchOptions.searchTokenString) {
-            queryParams[_types.Param.searchTokenString] = encodeURIComponent(searchOptions.searchTokenString);
-            if (searchOptions.executeSearch) queryParams[_types.Param.executeSearch] = true;
-        }
-        if (searchQuery) queryParams[_types.Param.SearchQuery] = encodeURIComponent(searchQuery);
-        if (enableSearchAssist) queryParams[_types.Param.EnableSearchAssist] = true;
-        if (hideResults) queryParams[_types.Param.HideResult] = true;
-        if (disabledActions === null || disabledActions === void 0 ? void 0 : disabledActions.length) queryParams[_types.Param.DisableActions] = disabledActions;
-        if (disabledActionReason) queryParams[_types.Param.DisableActionReason] = disabledActionReason;
-        if (hiddenActions === null || hiddenActions === void 0 ? void 0 : hiddenActions.length) queryParams[_types.Param.HideActions] = hiddenActions;
-        queryParams[_types.Param.DataSourceMode] = this.getDataSourceMode();
-        queryParams[_types.Param.UseLastSelectedDataSource] = false;
-        let query = '';
-        const queryParamsString = _utils.getQueryParamString(queryParams, true);
-        if (queryParamsString) query = `?${queryParamsString}`;
-        return `${this.getEmbedBasePath(query)}/${answerPath}`;
-    }
-    /**
-     * Render the embedded ThoughtSpot search
-     */ render() {
-        super.render();
-        const { answerId , dataSources , searchQuery  } = this.viewConfig;
-        const src = this.getIFrameSrc(answerId, dataSources, searchQuery);
-        this.renderIFrame(src, this.viewConfig.frameParams);
-        return this;
-    }
-}
-
-},{"../types":"lHa6F","../utils":"hpbba","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./base":"96H72"}],"3mH4A":[function(require,module,exports) {
+},{}],"3mH4A":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 /**
@@ -6515,6 +6444,79 @@ class PinboardEmbed extends _base.V1Embed {
     }
 }
 
-},{"../errors":"k9i6l","../types":"lHa6F","../utils":"hpbba","./base":"96H72","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["7nZVA","8lqZg"], "8lqZg", "parcelRequire8e0e")
+},{"../errors":"k9i6l","../types":"lHa6F","../utils":"hpbba","./base":"96H72","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"cbe7G":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+/**
+ * Embed ThoughtSpot search
+ *
+ * @Category Search Embed
+ */ parcelHelpers.export(exports, "SearchEmbed", ()=>SearchEmbed
+);
+/**
+ * Copyright (c) 2021
+ *
+ * Embed ThoughtSpot search or a saved answer
+ *
+ * @summary Search embed
+ * @author Ayon Ghosh <ayon.ghosh@thoughtspot.com>
+ */ var _types = require("../types");
+var _utils = require("../utils");
+var _base = require("./base");
+class SearchEmbed extends _base.TsEmbed {
+    constructor(domSelector, viewConfig){
+        super(domSelector);
+        this.viewConfig = viewConfig;
+    }
+    /**
+     * Get the state of the data sources panel that the embedded
+     * ThoughtSpot search will be initialized with.
+     */ getDataSourceMode() {
+        let dataSourceMode = _types.DataSourceVisualMode.Expanded;
+        if (this.viewConfig.collapseDataSources === true) dataSourceMode = _types.DataSourceVisualMode.Collapsed;
+        if (this.viewConfig.hideDataSources === true) dataSourceMode = _types.DataSourceVisualMode.Hidden;
+        return dataSourceMode;
+    }
+    /**
+     * Construct the URL of the embedded ThoughtSpot search to be
+     * loaded in the iframe
+     * @param answerId The GUID of a saved answer
+     * @param dataSources A list of data source GUIDs
+     * @param searchQuery A search query to be generated on load
+     */ getIFrameSrc(answerId, dataSources, searchQuery) {
+        const { disabledActions , disabledActionReason , hiddenActions , hideResults , enableSearchAssist , searchOptions ,  } = this.viewConfig;
+        const answerPath = answerId ? `saved-answer/${answerId}` : 'answer';
+        const queryParams = {
+        };
+        if (dataSources && dataSources.length) queryParams[_types.Param.DataSources] = JSON.stringify(dataSources);
+        if (searchOptions === null || searchOptions === void 0 ? void 0 : searchOptions.searchTokenString) {
+            queryParams[_types.Param.searchTokenString] = encodeURIComponent(searchOptions.searchTokenString);
+            if (searchOptions.executeSearch) queryParams[_types.Param.executeSearch] = true;
+        }
+        if (searchQuery) queryParams[_types.Param.SearchQuery] = encodeURIComponent(searchQuery);
+        if (enableSearchAssist) queryParams[_types.Param.EnableSearchAssist] = true;
+        if (hideResults) queryParams[_types.Param.HideResult] = true;
+        if (disabledActions === null || disabledActions === void 0 ? void 0 : disabledActions.length) queryParams[_types.Param.DisableActions] = disabledActions;
+        if (disabledActionReason) queryParams[_types.Param.DisableActionReason] = disabledActionReason;
+        if (hiddenActions === null || hiddenActions === void 0 ? void 0 : hiddenActions.length) queryParams[_types.Param.HideActions] = hiddenActions;
+        queryParams[_types.Param.DataSourceMode] = this.getDataSourceMode();
+        queryParams[_types.Param.UseLastSelectedDataSource] = false;
+        let query = '';
+        const queryParamsString = _utils.getQueryParamString(queryParams, true);
+        if (queryParamsString) query = `?${queryParamsString}`;
+        return `${this.getEmbedBasePath(query)}/${answerPath}`;
+    }
+    /**
+     * Render the embedded ThoughtSpot search
+     */ render() {
+        super.render();
+        const { answerId , dataSources , searchQuery  } = this.viewConfig;
+        const src = this.getIFrameSrc(answerId, dataSources, searchQuery);
+        this.renderIFrame(src, this.viewConfig.frameParams);
+        return this;
+    }
+}
 
-//# sourceMappingURL=index.975ef6c8.js.map
+},{"../types":"lHa6F","../utils":"hpbba","./base":"96H72","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["7nZVA","8lqZg"], "8lqZg", "parcelRequired547")
+
+//# sourceMappingURL=test.975ef6c8.js.map

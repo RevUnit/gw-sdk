@@ -1,0 +1,61 @@
+body {
+  font-family: "Open Sans", sans-serif;
+  font-size: 16px;
+}
+
+.main-container {
+  margin: auto;
+  max-width: 900px;
+}
+
+.iframe-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 3rem;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.iframe-container iframe {
+  width: 500px;
+  height: 430px;
+  margin: 0 auto 0 auto;
+  border: none;
+}
+
+.iframe-item {
+  gap: 0.75rem;
+  padding: 0.75rem;
+  display: flex;
+  justify-content: center;
+  margin-top: 3rem;
+  border: thin solid lightgray;
+  border-radius: 4px;
+}
+
+.iframe-description {
+  width: 260px;
+}
+
+.iframe-description h3 {
+  margin: 0px 0px 1rem 0px;
+}
+
+.iframe-description p {
+  margin: 0px;
+  line-height: 1.4rem;
+  font-weight: lighter;
+}
+
+.title-container h1 {
+  margin-bottom: 0.5rem;
+}
+
+.title-container h2 {
+  font-weight: lighter;
+  margin-top: 0;
+}
+.display-ilb {
+  display: inline-block;
+}
